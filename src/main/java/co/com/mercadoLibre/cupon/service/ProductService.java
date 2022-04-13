@@ -16,10 +16,15 @@ import net.minidev.json.JSONObject;
 public class ProductService {
 
 	@Autowired
-	RestTemplate restTemplate;
+	private RestTemplate restTemplate;
 	
 	//@Value("${urls.products}")
-	String url;
+	private String url;
+	
+	public ProductService(RestTemplate restTemplate) {
+		
+		this.restTemplate = restTemplate;
+	}
 
 	public Map<String, Float> getProductPrices(String ids) {
 		

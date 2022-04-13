@@ -4,7 +4,7 @@ spring:
 spring:
   profiles: dev
 urls:
-  products: https://api.mercadolibre.com/items?
+  products: https://api.mercadolibre.com/items?ids=
   
 ---
 spring:

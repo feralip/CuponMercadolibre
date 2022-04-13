@@ -8,10 +8,10 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 public class Response implements Serializable{
 
 	@JsonAlias("item_ids")
-	List<String> itemsIds;
+	private List<String> itemsIds;
 	
 	@JsonAlias("total")
-	Float total;
+	private Float total;
 	
 	public Response() {
 		
