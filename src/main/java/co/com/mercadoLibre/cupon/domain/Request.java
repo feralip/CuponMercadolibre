@@ -17,6 +17,11 @@ public class Request implements Serializable {
 	public Request() {
 		
 	}
+		
+	public Request(Float amount, Set<String> itemIds) {
+		this.amount = amount;
+		this.itemIds = itemIds;
+	}
 
 	public Set<String> getItemIds() {
 		return itemIds;

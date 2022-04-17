@@ -1,4 +1,4 @@
-package co.com.mercadoLibre.cupon.service;
+package co.com.mercadoLibre.cupon.service.restConsumer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +20,10 @@ public class ProductService {
 	
 	//@Value("${urls.products}")
 	private String url;
+	
+	public ProductService() {
+		
+	}
 	
 	public ProductService(RestTemplate restTemplate) {
 		

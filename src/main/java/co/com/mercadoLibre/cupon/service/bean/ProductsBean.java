@@ -1,4 +1,4 @@
-package co.com.mercadoLibre.cupon.service;
+package co.com.mercadoLibre.cupon.service.bean;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,27 +10,41 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import co.com.mercadoLibre.cupon.domain.Request;
+import co.com.mercadoLibre.cupon.domain.Response;
+import co.com.mercadoLibre.cupon.exceptions.ProductsNotFoundException;
+import co.com.mercadoLibre.cupon.service.ICalculatorCuponProducts;
+import co.com.mercadoLibre.cupon.service.restConsumer.ProductService;
 import co.com.mercadoLibre.cupon.threads.InvoqueRestCallable;
 
 @Service
-public class ProcesarProceso {
+public class ProductsBean {
 
 	@Autowired
 	ProductService productService;
 	
 	@Autowired
 	ICalculatorCuponProducts calculatorCuponProducts;
+	
+	public ProductsBean() {
+		
+	}
+	
+	public ProductsBean(ICalculatorCuponProducts calculatorCuponProducts, ProductService productService) {
+		
+		this.calculatorCuponProducts = calculatorCuponProducts;
+		this.productService = productService;
+	}
 
-	public void analyzeProcess(Request request) {
+	public Response analyzeProcess(Request request) throws ProductsNotFoundException {
 
-		if (request.getItemIds() != null && request.getItemIds().isEmpty()) {
-			return;
+		if (request == null || request.getItemIds() == null || request.getItemIds().isEmpty()) {
+			throw new ProductsNotFoundException("");
 		}
 		
 		List<String> idSplited = splitIds(request.getItemIds(), 20);
@@ -39,6 +53,22 @@ public class ProcesarProceso {
 		
 		List<String> productsSelected = calculatorCuponProducts.calculate(pricesById, request.getAmount());
 		
+		
+		if(productsSelected == null || productsSelected.isEmpty()) {
+			
+			throw new ProductsNotFoundException("");
+		}
+		
+		
+		AtomicReference<Float> total = new AtomicReference();
+		total.set(0F);
+		
+		productsSelected.stream().forEach(itera -> total.set(total.get() + pricesById.get(itera)));
+			
+		Response response = new Response();
+		response.setItemsIds(productsSelected);
+		response.setTotal(total.get());
+		return response;
 
 	}
 

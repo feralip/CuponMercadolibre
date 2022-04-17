@@ -17,6 +17,13 @@ public class Response implements Serializable{
 		
 	}
 
+	public Response(Float total, List<String> itemsIds) {
+		
+		this.total = total;
+		this.itemsIds = itemsIds;
+	}
+	
+	
 	public List<String> getItemsIds() {
 		return itemsIds;
 	}
