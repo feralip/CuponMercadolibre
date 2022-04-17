@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import co.com.mercadoLibre.cupon.domain.Response;
 import co.com.mercadoLibre.cupon.domain.Request;
+import co.com.mercadoLibre.cupon.domain.Response;
 
 @RestController
 @RequestMapping("/coupon/v1")

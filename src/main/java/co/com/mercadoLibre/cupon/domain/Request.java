@@ -1,7 +1,6 @@
 package co.com.mercadoLibre.cupon.domain;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonAlias;

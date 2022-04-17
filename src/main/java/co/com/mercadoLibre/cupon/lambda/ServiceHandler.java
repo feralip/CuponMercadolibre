@@ -1,18 +1,19 @@
 package co.com.mercadoLibre.cupon.lambda;
 
+import java.util.function.Function;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
+import org.springframework.stereotype.Component;
 
 import co.com.mercadoLibre.cupon.domain.Request;
 import co.com.mercadoLibre.cupon.domain.Response;
 import co.com.mercadoLibre.cupon.exceptions.ProductsNotFoundException;
 import co.com.mercadoLibre.cupon.service.bean.ProductsBean;
 
-public class ServiceHandler implements RequestHandler<Request, ResponseEntity<Response>> {
+@Component("ServiceHandler")
+public class ServiceHandler implements Function<Request, ResponseEntity<Response>> {
 
 	@Autowired
 	private ProductsBean parallelProcess;
@@ -22,7 +23,7 @@ public class ServiceHandler implements RequestHandler<Request, ResponseEntity<Re
 	}
 
 	@Override
-	public ResponseEntity<Response> handleRequest(Request request, Context context) {
+	public ResponseEntity<Response> apply(Request request) {
 
 		Response response = null;
 		try {

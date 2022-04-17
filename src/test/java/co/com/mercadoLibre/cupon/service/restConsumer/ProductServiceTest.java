@@ -1,4 +1,4 @@
-package co.com.mercadoLibre.cupon.service;
+package co.com.mercadoLibre.cupon.service.restConsumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -8,31 +8,24 @@ import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import co.com.mercadoLibre.cupon.service.restConsumer.ProductService;
-
 public class ProductServiceTest {
 
-	private static ProductService productService;
 
-	@Mock
-	private static RestTemplate restTemplate;
+	private static RestTemplate restTemplate = Mockito.mock(RestTemplate.class);
 
-	private static String url = "https://api.mercadolibre.com/items?ids=";
 
 	private static JSONArray jsonArray;
 
 	@Test
-	public void getProductsPrices() {
+	public void getProductsPricesTest() {
+		
+		
 
 		try {
 			
@@ -50,9 +43,9 @@ public class ProductServiceTest {
 			jsonArray.put(objectOne);
 			
 			Mockito.when(restTemplate.getForEntity(anyString(), any()))
-					.thenReturn(new ResponseEntity<>(jsonArray, HttpStatus.OK));
+			.thenReturn(new ResponseEntity<>(jsonArray, HttpStatus.OK));
 
-			productService = new ProductService(restTemplate);
+			ProductService productService = new ProductService(restTemplate);
 
 			String ids = "1,2,3,4";
 
@@ -62,7 +55,7 @@ public class ProductServiceTest {
 			
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 		}
 
 	}

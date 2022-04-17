@@ -1,15 +1,9 @@
 package co.com.mercadoLibre.cupon.service.bean;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +14,7 @@ import co.com.mercadoLibre.cupon.domain.Response;
 import co.com.mercadoLibre.cupon.exceptions.ProductsNotFoundException;
 import co.com.mercadoLibre.cupon.service.ICalculatorCuponProducts;
 import co.com.mercadoLibre.cupon.service.restConsumer.ProductService;
-import co.com.mercadoLibre.cupon.threads.InvoqueRestCallable;
+import co.com.mercadoLibre.cupon.threads.InvoqueRestExecutor;
 
 @Service
 public class ProductsBean {
@@ -31,14 +25,18 @@ public class ProductsBean {
 	@Autowired
 	ICalculatorCuponProducts calculatorCuponProducts;
 	
+	@Autowired
+	InvoqueRestExecutor invoqueRestExecutor;
+	
 	public ProductsBean() {
 		
 	}
 	
-	public ProductsBean(ICalculatorCuponProducts calculatorCuponProducts, ProductService productService) {
+	public ProductsBean(ICalculatorCuponProducts calculatorCuponProducts, ProductService productService, InvoqueRestExecutor invoqueRestExecutor) {
 		
 		this.calculatorCuponProducts = calculatorCuponProducts;
 		this.productService = productService;
+		this.invoqueRestExecutor = invoqueRestExecutor;
 	}
 
 	public Response analyzeProcess(Request request) throws ProductsNotFoundException {
@@ -49,7 +47,7 @@ public class ProductsBean {
 		
 		List<String> idSplited = splitIds(request.getItemIds(), 20);
 
-		Map<String, Float> pricesById = executeThread(idSplited);
+		Map<String, Float> pricesById = invoqueRestExecutor.executeThread(productService, idSplited);
 		
 		List<String> productsSelected = calculatorCuponProducts.calculate(pricesById, request.getAmount());
 		
@@ -103,36 +101,7 @@ public class ProductsBean {
 
 	}
 	
-	private Map<String, Float> executeThread(List<String> idSplited) {
-		
-		Map<String, Float> pricesById = new HashMap<>();
-				
-				
-		ExecutorService executor = Executors.newFixedThreadPool(10);
-		List<Future<Map<String, Float>>> list = new ArrayList<Future<Map<String, Float>>>();
-				
-		for (String iteraId: idSplited) {
-			
-			Callable<Map<String,Float>> callable = new InvoqueRestCallable(productService, iteraId);
-			Future<Map<String,Float>> future = executor.submit(callable);
-			list.add(future);
-		}
-		
-		
-		for (Future<Map<String,Float>> iteraFuture : list) {
-			try {
-				
-				pricesById.putAll(iteraFuture.get());
-				
-			} catch (InterruptedException | ExecutionException e) {
-				e.printStackTrace();
-			}
-		}
-
-		executor.shutdown();
-		
-		return pricesById;
-	}
+	
 
 	
 }

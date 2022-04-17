@@ -2,19 +2,13 @@ package co.com.mercadoLibre.cupon.lambda;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import java.util.Arrays;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -43,7 +37,7 @@ public class ServiceHandlerTest {
 				.thenReturn(new Response(250F, Arrays.asList("1", "2", "3")));
 
 		ServiceHandler serviceHandler = new ServiceHandler(parallelProcess);
-		ResponseEntity<Response> entity = serviceHandler.handleRequest(request, null);
+		ResponseEntity<Response> entity = serviceHandler.apply(request);
 
 		assertEquals(HttpStatus.OK, entity.getStatusCode() );
 
@@ -64,7 +58,7 @@ public class ServiceHandlerTest {
 				.thenThrow(ProductsNotFoundException.class);
 
 		ServiceHandler serviceHandler = new ServiceHandler(parallelProcess);
-		ResponseEntity<Response> entity = serviceHandler.handleRequest(request, null);
+		ResponseEntity<Response> entity = serviceHandler.apply(request);
 
 		assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode() );
 
