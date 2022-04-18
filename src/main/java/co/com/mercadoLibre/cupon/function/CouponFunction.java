@@ -1,4 +1,4 @@
-package co.com.mercadoLibre.cupon.lambda;
+package co.com.mercadoLibre.cupon.function;
 
 import java.util.function.Function;
 
@@ -12,13 +12,13 @@ import co.com.mercadoLibre.cupon.domain.Response;
 import co.com.mercadoLibre.cupon.exceptions.ProductsNotFoundException;
 import co.com.mercadoLibre.cupon.service.bean.ProductsBean;
 
-@Component("ServiceHandler")
-public class ServiceHandler implements Function<Request, ResponseEntity<Response>> {
+@Component("coupon")
+public class CouponFunction implements Function<Request, ResponseEntity<Response>> {
 
 	@Autowired
 	private ProductsBean parallelProcess;
 	
-	public ServiceHandler(ProductsBean parallelProcess) {
+	public CouponFunction(ProductsBean parallelProcess) {
 		this.parallelProcess = parallelProcess;
 	}
 

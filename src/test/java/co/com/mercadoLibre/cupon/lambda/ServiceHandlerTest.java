@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import co.com.mercadoLibre.cupon.domain.Request;
 import co.com.mercadoLibre.cupon.domain.Response;
 import co.com.mercadoLibre.cupon.exceptions.ProductsNotFoundException;
+import co.com.mercadoLibre.cupon.function.CouponFunction;
 import co.com.mercadoLibre.cupon.service.bean.ProductsBean;
 
 public class ServiceHandlerTest {
@@ -36,7 +37,7 @@ public class ServiceHandlerTest {
 		Mockito.when(parallelProcess.analyzeProcess(any(Request.class)))
 				.thenReturn(new Response(250F, Arrays.asList("1", "2", "3")));
 
-		ServiceHandler serviceHandler = new ServiceHandler(parallelProcess);
+		CouponFunction serviceHandler = new CouponFunction(parallelProcess);
 		ResponseEntity<Response> entity = serviceHandler.apply(request);
 
 		assertEquals(HttpStatus.OK, entity.getStatusCode() );
@@ -57,7 +58,7 @@ public class ServiceHandlerTest {
 		Mockito.when(parallelProcess.analyzeProcess(any(Request.class)))
 				.thenThrow(ProductsNotFoundException.class);
 
-		ServiceHandler serviceHandler = new ServiceHandler(parallelProcess);
+		CouponFunction serviceHandler = new CouponFunction(parallelProcess);
 		ResponseEntity<Response> entity = serviceHandler.apply(request);
 
 		assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode() );
