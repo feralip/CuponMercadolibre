@@ -1,6 +1,7 @@
 package co.com.mercadoLibre.cupon.service.restConsumer;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import net.minidev.json.JSONArray;
-import net.minidev.json.JSONObject;
 
 @Service
-public class ProductService {
+public class ProductConsumer {
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -20,11 +20,11 @@ public class ProductService {
 	private final String url = "https://api.mercadolibre.com/items?ids=";
 
 	
-	public ProductService() {
+	public ProductConsumer() {
 		
 	}
 	
-	public ProductService(RestTemplate restTemplate) {
+	public ProductConsumer(RestTemplate restTemplate) {
 		
 		this.restTemplate = restTemplate;
 	}
@@ -39,9 +39,10 @@ public class ProductService {
 		
 		products.stream().forEach(itera -> {
 			
-			JSONObject product = new JSONObject((JSONObject)itera); 
-			if("200".equals(product.get("code"))) {
-				returnValues.put((String)((JSONObject)product.get("body")).get("id"), (Float)((JSONObject)product.get("body")).get("price"));
+			LinkedHashMap<String, Object> product = (LinkedHashMap) itera; 
+			if("200".equals(String.valueOf(product.get("code")))) {
+				LinkedHashMap<String, Object> body = (LinkedHashMap)product.get("body");
+				returnValues.put((String)body.get("id"), Float.valueOf(String.valueOf(body.get("price"))));
 				
 			}
 		});

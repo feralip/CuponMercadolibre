@@ -3,15 +3,15 @@ package co.com.mercadoLibre.cupon.domain;
 import java.io.Serializable;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Request implements Serializable {
 	
-	@JsonAlias("item_ids")
-	Set<String> itemIds;
+	@JsonProperty(value= "item_ids")
+	private Set<String> itemIds;
 	
-	@JsonAlias("amount")
-	Float amount;
+	@JsonProperty(value= "amount")
+	private Float amount;
 	
 	public Request() {
 		

@@ -13,14 +13,14 @@ import co.com.mercadoLibre.cupon.domain.Request;
 import co.com.mercadoLibre.cupon.domain.Response;
 import co.com.mercadoLibre.cupon.exceptions.ProductsNotFoundException;
 import co.com.mercadoLibre.cupon.service.ICalculatorCuponProducts;
-import co.com.mercadoLibre.cupon.service.restConsumer.ProductService;
+import co.com.mercadoLibre.cupon.service.restConsumer.ProductConsumer;
 import co.com.mercadoLibre.cupon.threads.InvoqueRestExecutor;
 
 @Service
 public class ProductsBean {
 
 	@Autowired
-	ProductService productService;
+	ProductConsumer productConsumer;
 	
 	@Autowired
 	ICalculatorCuponProducts calculatorCuponProducts;
@@ -32,10 +32,10 @@ public class ProductsBean {
 		
 	}
 	
-	public ProductsBean(ICalculatorCuponProducts calculatorCuponProducts, ProductService productService, InvoqueRestExecutor invoqueRestExecutor) {
+	public ProductsBean(ICalculatorCuponProducts calculatorCuponProducts, ProductConsumer productConsumer, InvoqueRestExecutor invoqueRestExecutor) {
 		
 		this.calculatorCuponProducts = calculatorCuponProducts;
-		this.productService = productService;
+		this.productConsumer = productConsumer;
 		this.invoqueRestExecutor = invoqueRestExecutor;
 	}
 
@@ -47,7 +47,7 @@ public class ProductsBean {
 		
 		List<String> idSplited = splitIds(request.getItemIds(), 20);
 
-		Map<String, Float> pricesById = invoqueRestExecutor.executeThread(productService, idSplited);
+		Map<String, Float> pricesById = invoqueRestExecutor.executeThread(productConsumer, idSplited);
 		
 		List<String> productsSelected = calculatorCuponProducts.calculate(pricesById, request.getAmount());
 		
@@ -86,15 +86,16 @@ public class ProductsBean {
 			}
 
 			if (count >= size) {
-				count = 1;
+				count = 0;
 				returnIdList.add(temporalList.toString());
 				temporalList = new StringBuilder();
 
 			}
+			count++;
 
 		}
 		
-		
+		returnIdList.add(temporalList.toString());
 		
 
 		return returnIdList;

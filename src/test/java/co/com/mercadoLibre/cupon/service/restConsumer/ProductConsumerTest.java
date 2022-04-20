@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-public class ProductServiceTest {
+public class ProductConsumerTest {
 
 
 	private static RestTemplate restTemplate = Mockito.mock(RestTemplate.class);
@@ -45,11 +45,11 @@ public class ProductServiceTest {
 			Mockito.when(restTemplate.getForEntity(anyString(), any()))
 			.thenReturn(new ResponseEntity<>(jsonArray, HttpStatus.OK));
 
-			ProductService productService = new ProductService(restTemplate);
+			ProductConsumer productConsumer = new ProductConsumer(restTemplate);
 
 			String ids = "1,2,3,4";
 
-			Map<String, Float> response = productService.getProductPrices(ids);
+			Map<String, Float> response = productConsumer.getProductPrices(ids);
 			assertEquals(response.get("1"), 180F);
 			assertEquals(response.get("2"), 200F);
 			

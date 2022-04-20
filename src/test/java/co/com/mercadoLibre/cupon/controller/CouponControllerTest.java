@@ -1,4 +1,4 @@
-package co.com.mercadoLibre.cupon.lambda;
+package co.com.mercadoLibre.cupon.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -15,12 +15,11 @@ import org.springframework.http.ResponseEntity;
 import co.com.mercadoLibre.cupon.domain.Request;
 import co.com.mercadoLibre.cupon.domain.Response;
 import co.com.mercadoLibre.cupon.exceptions.ProductsNotFoundException;
-import co.com.mercadoLibre.cupon.function.CouponFunction;
 import co.com.mercadoLibre.cupon.service.bean.ProductsBean;
 
-public class ServiceHandlerTest {
+public class CouponControllerTest {
 
-	private static ProductsBean parallelProcess = Mockito.mock(ProductsBean.class);
+private static ProductsBean parallelProcess = Mockito.mock(ProductsBean.class);
 	
 
 	@Test
@@ -37,8 +36,8 @@ public class ServiceHandlerTest {
 		Mockito.when(parallelProcess.analyzeProcess(any(Request.class)))
 				.thenReturn(new Response(250F, Arrays.asList("1", "2", "3")));
 
-		CouponFunction serviceHandler = new CouponFunction(parallelProcess);
-		ResponseEntity<Response> entity = serviceHandler.apply(request);
+		CouponController couponController = new CouponController(parallelProcess);
+		ResponseEntity<Response> entity = couponController.validateCoupon(request);
 
 		assertEquals(HttpStatus.OK, entity.getStatusCode() );
 
@@ -58,11 +57,11 @@ public class ServiceHandlerTest {
 		Mockito.when(parallelProcess.analyzeProcess(any(Request.class)))
 				.thenThrow(ProductsNotFoundException.class);
 
-		CouponFunction serviceHandler = new CouponFunction(parallelProcess);
-		ResponseEntity<Response> entity = serviceHandler.apply(request);
+		CouponController couponController = new CouponController(parallelProcess);
+		ResponseEntity<Response> entity = couponController.validateCoupon(request);
 
 		assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode() );
 
 	}
-
+	
 }

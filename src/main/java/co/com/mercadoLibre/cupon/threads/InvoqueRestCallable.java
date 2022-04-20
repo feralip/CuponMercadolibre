@@ -3,22 +3,22 @@ package co.com.mercadoLibre.cupon.threads;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import co.com.mercadoLibre.cupon.service.restConsumer.ProductService;
+import co.com.mercadoLibre.cupon.service.restConsumer.ProductConsumer;
 
 public class InvoqueRestCallable implements Callable<Map<String, Float> > {
 	
-	ProductService productService;
+	ProductConsumer productConsumer;
 	String productIds;
 	
-	public InvoqueRestCallable(ProductService productService, String productIds) {
+	public InvoqueRestCallable(ProductConsumer productConsumer, String productIds) {
 		
-		this.productService = productService;
+		this.productConsumer = productConsumer;
 		this.productIds = productIds;
 	}
 	
 	public Map<String, Float> call() throws Exception{
 		
-		return productService.getProductPrices(productIds);
+		return productConsumer.getProductPrices(productIds);
 				
 	}
 

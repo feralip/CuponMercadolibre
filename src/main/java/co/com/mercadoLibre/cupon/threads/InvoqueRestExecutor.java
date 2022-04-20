@@ -12,12 +12,12 @@ import java.util.concurrent.Future;
 
 import org.springframework.stereotype.Service;
 
-import co.com.mercadoLibre.cupon.service.restConsumer.ProductService;
+import co.com.mercadoLibre.cupon.service.restConsumer.ProductConsumer;
 
 @Service
 public class InvoqueRestExecutor {
 	
-public Map<String, Float> executeThread(ProductService productService, List<String> idSplited) {
+public Map<String, Float> executeThread(ProductConsumer productConsumer, List<String> idSplited) {
 		
 		Map<String, Float> pricesById = new HashMap<>();
 				
@@ -27,7 +27,7 @@ public Map<String, Float> executeThread(ProductService productService, List<Stri
 				
 		for (String iteraId: idSplited) {
 			
-			Callable<Map<String,Float>> callable = new InvoqueRestCallable(productService, iteraId);
+			Callable<Map<String,Float>> callable = new InvoqueRestCallable(productConsumer, iteraId);
 			Future<Map<String,Float>> future = executor.submit(callable);
 			list.add(future);
 		}

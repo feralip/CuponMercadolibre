@@ -20,7 +20,7 @@ import co.com.mercadoLibre.cupon.domain.Response;
 import co.com.mercadoLibre.cupon.exceptions.ProductsNotFoundException;
 import co.com.mercadoLibre.cupon.service.CalculatorCuponProductsImp;
 import co.com.mercadoLibre.cupon.service.ICalculatorCuponProducts;
-import co.com.mercadoLibre.cupon.service.restConsumer.ProductService;
+import co.com.mercadoLibre.cupon.service.restConsumer.ProductConsumer;
 import co.com.mercadoLibre.cupon.threads.InvoqueRestExecutor;
 
 public class ProductsBeanTest {
@@ -28,7 +28,7 @@ public class ProductsBeanTest {
 	private static final float amount = 500F;
 	
 	
-	private static ProductService productService = new ProductService();
+	private static ProductConsumer productConsumer = new ProductConsumer();
 		
 	private static InvoqueRestExecutor invoqueRestExecutor  = Mockito.mock(InvoqueRestExecutor.class);
 	
@@ -58,7 +58,7 @@ public class ProductsBeanTest {
 		
 		Response response = new Response();
 		
-		ProductsBean productBean = new ProductsBean(new CalculatorCuponProductsImp(), productService, invoqueRestExecutor); 
+		ProductsBean productBean = new ProductsBean(new CalculatorCuponProductsImp(), productConsumer, invoqueRestExecutor); 
 		
 		try {
 			
@@ -89,7 +89,7 @@ public class ProductsBeanTest {
 		
 		Response response = null;
 		
-		ProductsBean productBean = new ProductsBean(new CalculatorCuponProductsImp(), productService, invoqueRestExecutor); 
+		ProductsBean productBean = new ProductsBean(new CalculatorCuponProductsImp(), productConsumer, invoqueRestExecutor); 
 		
 		try {
 			
@@ -131,6 +131,10 @@ public class ProductsBeanTest {
 		mapReturnMock.put("19", 50F);
 		mapReturnMock.put("20", 150F);
 		mapReturnMock.put("21", 50F);
+		mapReturnMock.put("23", 150F);
+		mapReturnMock.put("24", 50F);
+		mapReturnMock.put("25", 150F);
+		mapReturnMock.put("26", 50F);
 		
 		Mockito.when(invoqueRestExecutor.executeThread(any(), any()))
 		.thenReturn(mapReturnMock);
@@ -148,7 +152,7 @@ public class ProductsBeanTest {
 		
 		Response response = null;
 		
-		ProductsBean productBean = new ProductsBean(calculatorCuponProducts, productService, invoqueRestExecutor); 
+		ProductsBean productBean = new ProductsBean(calculatorCuponProducts, productConsumer, invoqueRestExecutor); 
 		
 		try {
 			
